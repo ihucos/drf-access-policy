@@ -26,3 +26,9 @@ class AccessViewSetMixin(object):
     def finalize_response(self, request, response, *args, **kwargs) -> Response:
         response = super().finalize_response(request, response, *args, **kwargs)
         return response
+
+
+class StrictAccessViewSetMixin(AccessViewSetMixin):
+    def get_queryset(self):
+        qs = super().get_queryset()
+        return self.access_policy.scope_queryset(self.request, qs)
